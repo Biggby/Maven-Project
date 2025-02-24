@@ -8,15 +8,15 @@ import projects.exception.DbException;
 
 public class DbConnection {
 
-	private static final String SCHEMA = "recipes";
-	private static final String USER = "recipes";
-	private static final String PASSWORD = "recipes";
+	private static final String SCHEMA = "projects";
+	private static final String USER = "projects";
+	private static final String PASSWORD = "projects";
 	private static final String HOST = "localhost";
 	private static final int PORT = 3306;
 	
 	public static Connection getConnection() {
-		String url = String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s&useSSL=true&allowPublicKeyRetrieval=true", 
-				HOST, PORT, SCHEMA, USER, PASSWORD);
+	    String url = String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s&useSSL=false&allowPublicKeyRetrieval=true",
+	        HOST, PORT, SCHEMA, USER, PASSWORD);
 		
 	System.out.println("Connecting with url=" + url);
 	
