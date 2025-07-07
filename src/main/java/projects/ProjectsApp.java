@@ -1,7 +1,9 @@
 package projects;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 import projects.entity.Project;
@@ -11,10 +13,13 @@ import projects.service.ProjectService;
 public class ProjectsApp {
 	  private Scanner scanner = new Scanner(System.in);
 	  private ProjectService projectService = new ProjectService();
+	  private Project curProject;
 
 	 
 	  private List<String> operations = List.of(
-	      "1) Add a project"
+	      "1) Add a project",
+	      "2) List project.",
+	      "3) Select a project"
 	  );
 	  
 	  public static void main(String[] args) {
@@ -40,6 +45,14 @@ public class ProjectsApp {
 		          case 1:
 		            createProject();
 		            break;
+		            
+		          case 2:
+		              listProjects();  // Add this case
+		              break;
+		              
+		          case 3:
+		        	  selectProject();
+		        	  break;
 
 		          default:
 		            System.out.println("\n" + selection + " is not a valid selection. Try again. \n");
@@ -52,6 +65,29 @@ public class ProjectsApp {
 		    }
 		  }
 
+	
+	
+	private void selectProject() throws NoSuchElementException, SQLException {
+		listProjects();
+		
+		Integer projectId = getIntInput("Select a project ID");
+		
+		curProject = null;
+		
+		curProject = projectService.fetchProjectById(projectId);
+				
+		}
+		
+	
+
+	private void listProjects() {
+		List<Project> projects = projectService.fetchAllProjects();
+		
+		System.out.println("\nProjects:");
+		
+		projects.forEach(project -> System.out.println("  " + project.getProjectId() + ": " + project.getProjectName() + "\n"));
+		
+	}
 
 	private void createProject() {
 		String projectName = getStringInput("Enter the project name");
@@ -107,6 +143,12 @@ public class ProjectsApp {
 	private void printOperations() {
 		System.out.println("Please select a Menu option from the available options. or Press Enter to quit:");	
 		operations.forEach(line -> System.out.println("  " + line));
+		
+		if (Objects.isNull(curProject)) {
+		      System.out.println("\nYou are not working with a project.");
+		    } else {
+		      System.out.println("\nYou are working with project " + curProject);
+		    }
 	}
 	
 	
